@@ -1,0 +1,21 @@
+{
+  "name": "hubot-tweeter",
+  "version": "0.1.0",
+  "description": "A hubot script for sharing access to twitter accounts for sending tweets.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhubert/hubot-tweeter.git"
+  },
+  "keywords": [
+    "hubot"
+  ],
+  "dependencies": {
+    "coffee-script": "> 1.1.3",
+    "twit": ">= 1.1.8"
+  },
+  "author": "jhubert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jhubert/hubot-tweeter/issues"
+  }
+}
