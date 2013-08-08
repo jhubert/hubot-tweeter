@@ -1,13 +1,13 @@
 # Description:
-#   Allows users to post a tweet to twitter using a common shared
-#   Twitter account.
+#   Allows users to post a tweet to Twitter using common shared
+#   Twitter accounts.
 #
 #   Requires a Twitter consumer key and secret, which you can get by
 #   creating an application here: https://dev.twitter.com/apps
 #
 #   Based on KevinTraver's twitter.coffee script: http://git.io/iCQPyA
 #
-#   HUBOT_TWITTER_ACCOUNTS should be a string that parses to a JSON
+#   HUBOT_TWEETER_ACCOUNTS should be a string that parses to a JSON
 #   object that contains access_token and access_token_secret for each
 #   twitter screen name you want to allow people to use.
 #
@@ -18,7 +18,7 @@
 #   }
 #
 # Commands:
-#   hubot tweet@screen_name <update>
+#   hubot tweet@<screen_name> <update> - posts <update> to Twitter as <screen_name>
 #
 # Dependencies:
 #   "twit": "1.1.8"
@@ -26,7 +26,7 @@
 # Configuration:
 #   HUBOT_TWITTER_CONSUMER_KEY
 #   HUBOT_TWITTER_CONSUMER_SECRET
-#   HUBOT_TWITTER_ACCOUNTS
+#   HUBOT_TWEETER_ACCOUNTS
 #
 # Author:
 #   jhubert
