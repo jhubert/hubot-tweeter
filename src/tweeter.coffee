@@ -72,8 +72,7 @@ module.exports = (robot) ->
       status: update
     , (err, reply) ->
       if err
-        data = JSON.parse(err.data).errors[0]
-        msg.reply "I can't do that. #{data.message} (error #{data.code})"
+        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
         return
       if reply['text']
         return msg.send "#{reply['user']['screen_name']} just tweeted: #{reply['text']}"
