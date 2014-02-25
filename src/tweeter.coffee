@@ -35,7 +35,7 @@ Twit = require "twit"
 config =
   consumer_key: process.env.HUBOT_TWITTER_CONSUMER_KEY
   consumer_secret: process.env.HUBOT_TWITTER_CONSUMER_SECRET
-  accounts: JSON.parse(process.env.HUBOT_TWEETER_ACCOUNTS)
+  accounts: JSON.parse(process.env.HUBOT_TWEETER_ACCOUNTS) if process.env.HUBOT_TWEETER_ACCOUNTS?
 
 unless config.consumer_key
   console.log "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
