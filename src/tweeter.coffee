@@ -22,6 +22,7 @@
 #
 # Dependencies:
 #   "twit": "1.1.8"
+#   "twitter-text": "1.7.x"
 #
 # Configuration:
 #   HUBOT_TWITTER_CONSUMER_KEY
@@ -30,8 +31,12 @@
 #
 # Author:
 #   jhubert
+#
+# Repository:
+#   https://github.com/jhubert/hubot-tweeter
 
 Twit = require "twit"
+twitterText = require "twitter-text"
 config =
   consumer_key: process.env.HUBOT_TWITTER_CONSUMER_KEY
   consumer_secret: process.env.HUBOT_TWITTER_CONSUMER_SECRET
@@ -60,6 +65,11 @@ module.exports = (robot) ->
 
     unless update and update.length > 0
       msg.reply "You can't very well tweet an empty status, can ya?"
+      return
+
+    tweetOverflow = twitterText.getTweetLength(update) - 140
+    if tweetOverflow > 0
+      msg.reply "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
       return
 
     twit = new Twit
