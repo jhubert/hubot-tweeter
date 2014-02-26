@@ -87,6 +87,26 @@ module.exports = (robot) ->
         msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
         return
       if reply['text']
-        return msg.send "#{reply['user']['screen_name']} just tweeted: #{reply['text']}"
+        msg.send "#{reply['user']['screen_name']} just tweeted: '#{reply['text']}'."
+        return msg.send "To delete, run 'hubot untweet@#{username} #{reply['id_str']}'."
       else
-        return msg.reply "Hmmm.. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
+        return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
+
+  robot.respond /untweet\@([^\s]+)\s(.*)/i, (msg) ->
+    username = msg.match[1]
+    tweet_id = msg.match[2]
+
+    twit = new Twit
+      consumer_key: config.consumer_key
+      consumer_secret: config.consumer_secret
+      access_token: config.accounts[username].access_token
+      access_token_secret: config.accounts[username].access_token_secret
+
+    twit.post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
+      if err
+        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
+        return
+      if reply['text']
+        return msg.send "#{reply['user']['screen_name']} just deleted tweet: '#{reply['text']}'."
+      else
+        return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
