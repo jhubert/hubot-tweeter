@@ -19,6 +19,7 @@
 #
 # Commands:
 #   hubot tweet@<screen_name> <update> - posts <update> to Twitter as <screen_name>
+#   hubot untweet@<screen_name> <tweet_id> - deletes <tweet_id> from Twitter
 #
 # Dependencies:
 #   "twit": "1.1.8"
