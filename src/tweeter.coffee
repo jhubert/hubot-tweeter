@@ -19,7 +19,8 @@
 #
 # Commands:
 #   hubot tweet@<screen_name> <update> - posts <update> to Twitter as <screen_name>
-#   hubot untweet@<screen_name> <tweet_id> - deletes <tweet_id> from Twitter
+#   hubot untweet@<screen_name> <tweet_url_or_id> - deletes <tweet_url_or_id> from Twitter
+#   hubot retweet@<screen_name> <tweet_url_or_id> - <screen_name> retweets <tweet_url_or_id>. Alias: rt@<screen_name>
 #
 # Dependencies:
 #   "twit": "1.1.8"
@@ -49,6 +50,10 @@ authenticated_twit = (username) ->
     consumer_secret: config.consumer_secret
     access_token: config.accounts[username].access_token
     access_token_secret: config.accounts[username].access_token_secret
+
+extract_tweet_id = (tweet_id_or_url) ->
+  tweet_id_match = tweet_url_or_id.match(/(\d+)$/)
+  tweet_id_match[0] if tweet_id_match and tweet_id_match[0]
 
 unless config.consumer_key
   console.log "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
@@ -95,8 +100,12 @@ module.exports = (robot) ->
         return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
 
   robot.respond /untweet\@([^\s]+)\s(.*)/i, (msg) ->
-    username = msg.match[1]
-    tweet_id = msg.match[2]
+    username        = msg.match[1]
+    tweet_url_or_id = msg.match[2]
+    tweet_id        = extract_tweet_id(tweet_url_or_id)
+    unless tweet_id
+      msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
+      return
 
     authenticated_twit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
       if err
@@ -106,3 +115,20 @@ module.exports = (robot) ->
         return msg.send "#{reply['user']['screen_name']} just deleted tweet: '#{reply['text']}'."
       else
         return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
+
+  robot.respond /r(etwee)?t\@([^\s]+)\s(.*)/i, (msg) ->
+    username        = msg.match[1]
+    tweet_url_or_id = msg.match[2]
+    tweet_id        = extract_tweet_id(tweet_url_or_id)
+    unless tweet_id
+      msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
+      return
+
+    authenticated_twit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
+      if err
+        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
+        return
+      if reply['text']
+        return msg.send "#{reply['user']['screen_name']} just tweeted: #{reply['text']}"
+      else
+        return msg.reply "Hmmm. I'm not sure if that retweet posted. Check the account: http://twitter.com/#{username}"
