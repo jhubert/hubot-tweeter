@@ -42,6 +42,13 @@ config =
   consumer_secret: process.env.HUBOT_TWITTER_CONSUMER_SECRET
   accounts_json: process.env.HUBOT_TWEETER_ACCOUNTS
 
+authenticated_twit = (username) ->
+  new Twit
+    consumer_key: config.consumer_key
+    consumer_secret: config.consumer_secret
+    access_token: config.accounts[username].access_token
+    access_token_secret: config.accounts[username].access_token_secret
+
 unless config.consumer_key
   console.log "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
 unless config.consumer_secret
@@ -74,13 +81,7 @@ module.exports = (robot) ->
       msg.reply "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
       return
 
-    twit = new Twit
-      consumer_key: config.consumer_key
-      consumer_secret: config.consumer_secret
-      access_token: config.accounts[username].access_token
-      access_token_secret: config.accounts[username].access_token_secret
-
-    twit.post "statuses/update",
+    authenticated_twit(username).post "statuses/update",
       status: update
     , (err, reply) ->
       if err
@@ -96,13 +97,7 @@ module.exports = (robot) ->
     username = msg.match[1]
     tweet_id = msg.match[2]
 
-    twit = new Twit
-      consumer_key: config.consumer_key
-      consumer_secret: config.consumer_secret
-      access_token: config.accounts[username].access_token
-      access_token_secret: config.accounts[username].access_token_secret
-
-    twit.post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
+    authenticated_twit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
       if err
         msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
         return
