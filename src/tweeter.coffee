@@ -94,8 +94,9 @@ module.exports = (robot) ->
         msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
         return
       if reply['text']
-        msg.send "#{reply['user']['screen_name']} just tweeted: '#{reply['text']}'."
-        return msg.send "To delete, run 'hubot untweet@#{username} #{reply['id_str']}'."
+        message = "#{reply['user']['screen_name']} just tweeted: #{reply['text']}."
+        message += " Delete it with '#{robot.name} untweet@#{username} #{reply['id_str']}'."
+        return msg.send message
       else
         return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
 
