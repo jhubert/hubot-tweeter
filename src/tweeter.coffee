@@ -76,15 +76,15 @@ module.exports = (robot) ->
       msg.reply "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
       return
 
-    Helpers.authenticated_twit(config, username).post "statuses/update",
+    Helpers.authenticatedTwit(config, username).post "statuses/update",
       status: update
     , (err, reply) ->
       if err
         msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        message = "#{reply['user']['screen_name']} just tweeted: #{reply['text']}."
-        message += " Delete it with '#{robot.alias} untweet@#{username} #{reply['id_str']}'."
+      if (response = Helpers.buildResponse(reply)).exists()
+        message = "#{response.tweeter()} just tweeted: ' #{response.tweet()} '."
+        message += " Delete it with '#{robot.alias} untweet@#{username} #{response.tweetId()}'."
         return msg.send message
       else
         return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
@@ -98,12 +98,12 @@ module.exports = (robot) ->
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    authenticated_twit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
+    Helpers.authenticatedTwit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
       if err
         msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        return msg.send "#{reply['user']['screen_name']} just deleted tweet: '#{reply['text']}'."
+      if (response = Helpers.buildResponse(reply)).exists()
+        return msg.send "#{response.tweeter()} just deleted tweet: '#{response.tweet()}'."
       else
         return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
 
@@ -116,11 +116,11 @@ module.exports = (robot) ->
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    Helpers.authenticated_twit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
+    Helpers.authenticatedTwit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
       if err
         msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        return msg.send "#{reply['user']['screen_name']} just tweeted: #{reply['text']}"
+      if (response = Helpers.buildResponse(reply)).exists()
+        return msg.send "#{response.tweeter()} just tweeted: #{response.tweet()}"
       else
         return msg.reply "Hmmm. I'm not sure if that retweet posted. Check the account: http://twitter.com/#{username}"
