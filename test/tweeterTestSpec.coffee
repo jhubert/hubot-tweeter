@@ -75,14 +75,14 @@ describe 'Helpers', ->
     it 'returns a Response object', ->
       expect(Helpers.buildResponse({})).to.be.an.instanceof Helpers.Response
 
-  describe 'Response', ->
-    reply =
-      user:
-        screen_name: 'jekyllrb'
-      text: 'Look ma, a tweet!'
-      id_str: '89358923589723589'
-    response = new Helpers.Response(reply)
+  reply =
+    user:
+      screen_name: 'jekyllrb'
+    text: 'Look ma, a tweet!'
+    id_str: '89358923589723589'
+  response = new Helpers.Response(reply)
 
+  describe 'Response', ->
     it 'knows who conducted the action', ->
       expect(response.tweeter()).to.equal 'jekyllrb'
 
@@ -94,3 +94,15 @@ describe 'Helpers', ->
 
     it 'knows the tweet ID', ->
       expect(response.tweetId()).to.equal '89358923589723589'
+
+  describe 'deletedTweetMessage', ->
+    it 'builds the deleted tweet message properly', ->
+      expect(Helpers.deletedTweetMessage(response)).to.equal "jekyllrb just deleted: ' Look ma, a tweet! '."
+
+  describe 'tweetPostedMessage', ->
+    it 'builds the tweet posted message properly', ->
+      expect(Helpers.tweetPostedMessage(response)).to.equal "jekyllrb just tweeted: ' Look ma, a tweet! '."
+
+  describe 'tweetRetweetedMessage', ->
+    it 'builds the tweet posted message properly', ->
+      expect(Helpers.tweetRetweetedMessage(response)).to.equal "jekyllrb just retweeted: ' Look ma, a tweet! '."

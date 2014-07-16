@@ -83,8 +83,8 @@ module.exports = (robot) ->
         msg.reply Helpers.errorMessage(err)
         return
       if (response = Helpers.buildResponse(reply)).exists()
-        message = "#{response.tweeter()} just tweeted: ' #{response.tweet()} '."
-        message += " Delete it with '#{robot.alias} untweet@#{username} #{response.tweetId()}'."
+        message = Helpers.tweetPostedMessage(response)
+        message += " Delete it with '#{robot.alias} untweet@#{response.tweeter()} #{response.tweetId()}'."
         return msg.send message
       else
         return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
@@ -93,7 +93,7 @@ module.exports = (robot) ->
     username        = msg.match[1]
     tweet_url_or_id = msg.match[2]
 
-    tweet_id        = Helpers.extractTweetId(tweet_url_or_id)
+    tweet_id = Helpers.extractTweetId(tweet_url_or_id)
     unless tweet_id
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
@@ -103,7 +103,7 @@ module.exports = (robot) ->
         msg.reply Helpers.errorMessage(err)
         return
       if (response = Helpers.buildResponse(reply)).exists()
-        return msg.send "#{response.tweeter()} just deleted tweet: '#{response.tweet()}'."
+        return msg.send Helpers.deletedTweetMessage(response)
       else
         return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
 
@@ -111,7 +111,7 @@ module.exports = (robot) ->
     username        = msg.match[1]
     tweet_url_or_id = msg.match[2]
 
-    tweet_id        = Helpers.extractTweetId(tweet_url_or_id)
+    tweet_id = Helpers.extractTweetId(tweet_url_or_id)
     unless tweet_id
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
@@ -121,6 +121,6 @@ module.exports = (robot) ->
         msg.reply Helpers.errorMessage(err)
         return
       if (response = Helpers.buildResponse(reply)).exists()
-        return msg.send "#{response.tweeter()} just tweeted: #{response.tweet()}"
+        return msg.send Helpers.tweetRetweetedMessage(response)
       else
         return msg.reply "Hmmm. I'm not sure if that retweet posted. Check the account: http://twitter.com/#{username}"

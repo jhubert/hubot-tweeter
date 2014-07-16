@@ -46,6 +46,30 @@ errorMessage = (err) ->
   "Gah! I can't do that: '#{err.message}' (returned a #{err.statusCode} status code)"
 
 #
+#
+#
+tweetActionMessage = (response, action) ->
+  "#{response.tweeter()} just #{action}: ' #{response.tweet()} '."
+
+#
+# The message that the bot returns when a tweet has been deleted.
+#
+deletedTweetMessage = (response) ->
+  tweetActionMessage(response, 'deleted')
+
+#
+# The message that the bot returns when a tweet has been posted.
+#
+tweetPostedMessage = (response) ->
+  tweetActionMessage(response, 'tweeted')
+
+#
+# The message that the bot returns when a tweet has been retweeted.
+#
+tweetRetweetedMessage = (response) ->
+  tweetActionMessage(response, 'retweeted')
+
+#
 # Create a new Response object
 #
 buildResponse = (resp) ->
@@ -67,11 +91,14 @@ class Response
     @reply['id_str']
 
 module.exports =
-  authenticatedTwit: authenticatedTwit,
-  extractTweetId:    extractTweetId,
-  tweetOverflow:     tweetOverflow,
-  accountIsSetup:    accountIsSetup,
-  tweetExists:       tweetExists,
-  errorMessage:      errorMessage,
-  buildResponse:     buildResponse,
-  Response:          Response
+  authenticatedTwit:     authenticatedTwit,
+  extractTweetId:        extractTweetId,
+  tweetOverflow:         tweetOverflow,
+  accountIsSetup:        accountIsSetup,
+  tweetExists:           tweetExists,
+  errorMessage:          errorMessage,
+  buildResponse:         buildResponse,
+  Response:              Response,
+  deletedTweetMessage:   deletedTweetMessage,
+  tweetPostedMessage:    tweetPostedMessage,
+  tweetRetweetedMessage: tweetRetweetedMessage
