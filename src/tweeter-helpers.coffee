@@ -16,7 +16,10 @@ authenticatedTwit = (config, username) ->
 #
 extractTweetId = (tweetIdOrUrl) ->
   tweetIdMatch = tweetIdOrUrl.match(/(\d+)$/)
-  tweetIdMatch[0] if tweetIdMatch and tweetIdMatch[0]
+  if tweetIdMatch and tweetIdMatch[0]
+    tweetIdMatch[0]
+  else
+    null
 
 #
 # Determine how much longer than 140 characters the tweet is.

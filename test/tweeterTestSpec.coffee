@@ -14,3 +14,7 @@ describe 'Helpers', ->
       tweetId = '1289838934'
       tweetUrl = "https://twitter.com/mattr-/status/#{tweetId}"
       expect(Helpers.extractTweetId(tweetUrl)).to.equal tweetId
+
+    it 'returns nothing if no valid id is there', ->
+      tweetUrl = "https://gist.github.com/parkr/cf27484fd03ea65f0c4d"
+      expect(Helpers.extractTweetId(tweetUrl)).to.equal null
