@@ -61,3 +61,12 @@ describe 'Helpers', ->
       expect(Helpers.tweetExists()).to.be.false
     it 'returns false if tweet is empty', ->
       expect(Helpers.tweetExists('')).to.be.false
+
+  describe 'errorMessage', ->
+    err =
+      statusCode: 500,
+      message: 'some-message'
+    it 'builds a nice human-readable msg', ->
+      expect(Helpers.errorMessage(err)).to.equal(
+        "Gah! I can't do that: 'some-message' (returned a 500 status code)"
+      )
