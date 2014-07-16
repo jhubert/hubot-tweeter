@@ -46,14 +46,13 @@ errorMessage = (err) ->
   "Gah! I can't do that: '#{err.message}' (returned a #{err.statusCode} status code)"
 
 #
-#
+# Create a new Response object
 #
 buildResponse = (resp) ->
   new Response(resp)
 
 class Response
   constructor: (@reply) ->
-    console.log("Got this response from the twitter API:", @reply)
 
   tweeter: ->
     @reply['user']['screen_name']
@@ -74,5 +73,5 @@ module.exports =
   accountIsSetup:    accountIsSetup,
   tweetExists:       tweetExists,
   errorMessage:      errorMessage,
-  response:          buildResponse,
+  buildResponse:     buildResponse,
   Response:          Response

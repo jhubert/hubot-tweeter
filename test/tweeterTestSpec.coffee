@@ -70,3 +70,7 @@ describe 'Helpers', ->
       expect(Helpers.errorMessage(err)).to.equal(
         "Gah! I can't do that: 'some-message' (returned a 500 status code)"
       )
+
+  describe 'buildResponse', ->
+    it 'returns a Response object', ->
+      expect(Helpers.buildResponse({})).to.be.an.instanceof Helpers.Response
