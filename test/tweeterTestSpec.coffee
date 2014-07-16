@@ -74,3 +74,23 @@ describe 'Helpers', ->
   describe 'buildResponse', ->
     it 'returns a Response object', ->
       expect(Helpers.buildResponse({})).to.be.an.instanceof Helpers.Response
+
+  describe 'Response', ->
+    reply =
+      user:
+        screen_name: 'jekyllrb'
+      text: 'Look ma, a tweet!'
+      id_str: '89358923589723589'
+    response = new Helpers.Response(reply)
+
+    it 'knows who conducted the action', ->
+      expect(response.tweeter()).to.equal 'jekyllrb'
+
+    it 'knows whether the tweet exists', ->
+      expect(response.exists()).to.be.true
+
+    it 'knows the content of the tweet', ->
+      expect(response.tweet()).to.equal 'Look ma, a tweet!'
+
+    it 'knows the tweet ID', ->
+      expect(response.tweetId()).to.equal '89358923589723589'
