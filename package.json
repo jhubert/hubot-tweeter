@@ -15,7 +15,8 @@
     "twitter-text": "^1.7.0"
   },
   "devDependencies": {
-    "mocha": "^1.20.1"
+    "mocha": "^1.20.1",
+    "chai":  "^1.9.1"
   },
   "main": "index.coffee",
   "author": "jhubert",
