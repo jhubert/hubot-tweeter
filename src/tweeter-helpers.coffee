@@ -31,7 +31,7 @@ tweetOverflow = (update) ->
 # Determine if the account is setup
 #
 accountIsSetup = (config, username) ->
-  config.accounts[username]
+  config.accounts[username]?
 
 #
 # Determine if the update is not empty.

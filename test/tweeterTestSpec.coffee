@@ -34,3 +34,21 @@ describe 'Helpers', ->
       tweet = 'Hey, check this out! https://gist.github.com/parkr/cf27484fd03ea65f0c4d'
       expect(Helpers.tweetOverflow(tweet)).to.equal -96
       expect(Helpers.tweetOverflow(tweet)).not.to.equal tweet.length-140
+
+  describe 'accountIsSetup', ->
+    it 'returns true if the username is registered', ->
+      config =
+        accounts:
+          jekyllrb:
+            something: 'there'
+      username = 'jekyllrb'
+      expect(Helpers.accountIsSetup(config, username)).to.be.true
+
+    it 'returns false if the username is not registered', ->
+      config =
+        accounts:
+          parkr:
+            something: 'else'
+      username = 'jekyllrb'
+      expect(Helpers.accountIsSetup(config, username)).to.be.false
+
