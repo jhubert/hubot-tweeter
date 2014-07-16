@@ -37,7 +37,7 @@ accountIsSetup = (config, username) ->
 # Determine if the update is not empty.
 #
 tweetExists = (update) ->
-  update and update.length > 0
+  update? and update.length > 0
 
 #
 # The error message to return to the user when the API freaks out.

@@ -52,3 +52,12 @@ describe 'Helpers', ->
       username = 'jekyllrb'
       expect(Helpers.accountIsSetup(config, username)).to.be.false
 
+  describe 'tweetExists', ->
+    it 'returns true if tweet is non-empty', ->
+      expect(Helpers.tweetExists('hi')).to.be.true
+    it 'returns false if tweet is null', ->
+      expect(Helpers.tweetExists(null)).to.be.false
+    it 'returns false if tweet is undefined', ->
+      expect(Helpers.tweetExists()).to.be.false
+    it 'returns false if tweet is empty', ->
+      expect(Helpers.tweetExists('')).to.be.false
