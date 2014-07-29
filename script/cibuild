@@ -1,0 +1,7 @@
+#!/bin/bash
+
+script/bootstrap
+
+./node_modules/mocha/bin/mocha \
+  --compilers coffee:coffee-script/register \
+  -R mocha-unfunk-reporter

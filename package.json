@@ -14,10 +14,18 @@
     "twit": "^1.1.12",
     "twitter-text": "^1.7.0"
   },
+  "devDependencies": {
+    "mocha": "^1.20.1",
+    "chai":  "^1.9.1",
+    "mocha-unfunk-reporter": "^0.4.0"
+  },
   "main": "index.coffee",
   "author": "jhubert",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jhubert/hubot-tweeter/issues"
+  },
+  "scripts": {
+    "test": "script/cibuild"
   }
 }

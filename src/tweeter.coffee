@@ -37,23 +37,12 @@
 # Repository:
 #   https://github.com/jhubert/hubot-tweeter
 
-Twit = require "twit"
-twitterText = require "twitter-text"
+Helpers = require './tweeter-helpers'
+
 config =
   consumer_key: process.env.HUBOT_TWITTER_CONSUMER_KEY
   consumer_secret: process.env.HUBOT_TWITTER_CONSUMER_SECRET
   accounts_json: process.env.HUBOT_TWEETER_ACCOUNTS
-
-authenticated_twit = (username) ->
-  new Twit
-    consumer_key: config.consumer_key
-    consumer_secret: config.consumer_secret
-    access_token: config.accounts[username].access_token
-    access_token_secret: config.accounts[username].access_token_secret
-
-extract_tweet_id = (tweet_id_or_url) ->
-  tweet_id_match = tweet_url_or_id.match(/(\d+)$/)
-  tweet_id_match[0] if tweet_id_match and tweet_id_match[0]
 
 unless config.consumer_key
   console.log "Please set the HUBOT_TWITTER_CONSUMER_KEY environment variable."
@@ -72,30 +61,30 @@ module.exports = (robot) ->
   robot.respond /tweet\@([^\s]+)\s(.+)$/i, (msg) ->
 
     username = msg.match[1].toLowerCase()
-    update   = msg.match[2].trim()
 
-    unless config.accounts[username]
-      msg.reply "I'm not setup to send tweets on behalf of #{msg.match[1]}. Sorry."
+    unless Helpers.accountIsSetup(config, username)
+      msg.reply "I'm not setup to send tweets on behalf of #{username}. Sorry."
       return
 
-    unless update and update.length > 0
+    update   = msg.match[2].trim()
+
+    unless Helpers.tweetExists(update)
       msg.reply "You can't very well tweet an empty status, can ya?"
       return
 
-    tweetOverflow = twitterText.getTweetLength(update) - 140
-    if tweetOverflow > 0
+    if (tweetOverflow = Helpers.tweetOverflow(update)) > 0
       msg.reply "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
       return
 
-    authenticated_twit(username).post "statuses/update",
+    Helpers.authenticatedTwit(config, username).post "statuses/update",
       status: update
     , (err, reply) ->
       if err
-        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
+        msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        message = "#{reply['user']['screen_name']} just tweeted: #{reply['text']}."
-        message += " Delete it with '#{robot.name} untweet@#{username} #{reply['id_str']}'."
+      if (response = Helpers.buildResponse(reply)).exists()
+        message = Helpers.tweetPostedMessage(response)
+        message += " Delete it with '#{robot.alias} untweet@#{response.tweeter()} #{response.tweetId()}'."
         return msg.send message
       else
         return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
@@ -103,33 +92,35 @@ module.exports = (robot) ->
   robot.respond /untweet\@([^\s]+)\s(.*)/i, (msg) ->
     username        = msg.match[1]
     tweet_url_or_id = msg.match[2]
-    tweet_id        = extract_tweet_id(tweet_url_or_id)
+
+    tweet_id = Helpers.extractTweetId(tweet_url_or_id)
     unless tweet_id
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    authenticated_twit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
+    Helpers.authenticatedTwit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
       if err
-        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
+        msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        return msg.send "#{reply['user']['screen_name']} just deleted tweet: '#{reply['text']}'."
+      if (response = Helpers.buildResponse(reply)).exists()
+        return msg.send Helpers.deletedTweetMessage(response)
       else
         return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
 
   robot.respond /r(etwee)?t\@([^\s]+)\s(.*)/i, (msg) ->
     username        = msg.match[1]
     tweet_url_or_id = msg.match[2]
-    tweet_id        = extract_tweet_id(tweet_url_or_id)
+
+    tweet_id = Helpers.extractTweetId(tweet_url_or_id)
     unless tweet_id
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    authenticated_twit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
+    Helpers.authenticatedTwit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
       if err
-        msg.reply "I can't do that. #{err.message} (error #{err.statusCode})"
+        msg.reply Helpers.errorMessage(err)
         return
-      if reply['text']
-        return msg.send "#{reply['user']['screen_name']} just tweeted: #{reply['text']}"
+      if (response = Helpers.buildResponse(reply)).exists()
+        return msg.send Helpers.tweetRetweetedMessage(response)
       else
         return msg.reply "Hmmm. I'm not sure if that retweet posted. Check the account: http://twitter.com/#{username}"
