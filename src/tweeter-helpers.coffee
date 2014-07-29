@@ -46,7 +46,7 @@ errorMessage = (err) ->
   "Gah! I can't do that: '#{err.message}' (returned a #{err.statusCode} status code)"
 
 #
-#
+# The human-readable message sent to the chat client about the tweet action.
 #
 tweetActionMessage = (response, action) ->
   "#{response.tweeter()} just #{action}: ' #{response.tweet()} '."
