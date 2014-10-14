@@ -1,4 +1,5 @@
 # hubot-tweeter
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/jhubert/hubot-tweeter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 A hubot script that allows users to tweet from a common twitter account
 
