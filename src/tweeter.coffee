@@ -98,7 +98,7 @@ module.exports = (robot) ->
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    Helpers.authenticatedTwit(username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
+    Helpers.authenticatedTwit(config, username).post "statuses/destroy/#{tweet_id}", {}, (err, reply) ->
       if err
         msg.reply Helpers.errorMessage(err)
         return
@@ -116,7 +116,7 @@ module.exports = (robot) ->
       msg.reply "Sorry, '#{tweet_url_or_id}' doesn't contain a valid id. Make sure it's a valid tweet URL or ID."
       return
 
-    Helpers.authenticatedTwit(username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
+    Helpers.authenticatedTwit(config, username).post "statuses/retweet/#{tweet_id}", (err, reply) ->
       if err
         msg.reply Helpers.errorMessage(err)
         return
