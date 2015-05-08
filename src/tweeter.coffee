@@ -59,7 +59,6 @@ module.exports = (robot) ->
     return
 
   robot.respond /tweet\@([^\s]+)\s(.+)$/i, (msg) ->
-
     username = msg.match[1].toLowerCase()
 
     unless Helpers.accountIsSetup(config, username)
@@ -108,8 +107,8 @@ module.exports = (robot) ->
         return msg.reply "Hmmm. I'm not sure if the tweet was deleted. Check the account: http://twitter.com/#{username}"
 
   robot.respond /r(etwee)?t\@([^\s]+)\s(.*)/i, (msg) ->
-    username        = msg.match[1]
-    tweet_url_or_id = msg.match[2]
+    username        = msg.match[2]
+    tweet_url_or_id = msg.match[3]
 
     tweet_id = Helpers.extractTweetId(tweet_url_or_id)
     unless tweet_id
