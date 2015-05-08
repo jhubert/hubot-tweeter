@@ -1,6 +1,6 @@
 {
   "name": "hubot-tweeter",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A hubot script for sharing access to twitter accounts for managing tweets.",
   "repository": {
     "type": "git",
