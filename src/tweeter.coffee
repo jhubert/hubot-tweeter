@@ -135,28 +135,28 @@ module.exports = (robot) ->
     username  = payload.username
 
     unless Helpers.accountIsSetup(config, username)
-      msg.reply "I'm not setup to send tweets on behalf of #{username}. Sorry."
+      console.log "I'm not setup to send tweets on behalf of #{username}. Sorry."
       return
 
     update    = payload.tweet
 
     unless Helpers.tweetExists(update)
-      msg.reply "You can't very well tweet an empty status, can ya?"
+      console.log "You can't very well tweet an empty status, can ya?"
       return
 
     if (tweetOverflow = Helpers.tweetOverflow(update)) > 0
-      msg.reply "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
+      console.log "Your tweet is #{tweetOverflow} characters too long. Twitter users can't read that many characters!"
       return
 
     Helpers.authenticatedTwit(config, username).post "statuses/update",
       status: update
     , (err, reply) ->
       if err
-        msg.reply Helpers.errorMessage(err)
+        console.log Helpers.errorMessage(err)
         return
       if (response = Helpers.buildResponse(reply)).exists()
         message = Helpers.tweetPostedMessage(response)
         message += " Delete it with '#{robot.alias} untweet@#{response.tweeter()} #{response.tweetId()}'."
         return msg.send message
       else
-        return msg.reply "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
+        return console.log "Hmmm. I'm not sure if the tweet posted. Check the account: http://twitter.com/#{username}"
