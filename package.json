@@ -1,6 +1,6 @@
 {
   "name": "hubot-emit-tweeter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Fork of hubot-tweeter that supports robot.emit",
   "repository": {
     "type": "git",
