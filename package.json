@@ -1,10 +1,10 @@
 {
-  "name": "@ibm/hubot-tweeter",
-  "version": "0.3.4",
-  "description": "A hubot script for sharing access to twitter accounts for managing tweets.",
+  "name": "hubot-emit-tweeter",
+  "version": "0.0.1",
+  "description": "Fork of hubot-tweeter that supports robot.emit",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jhubert/hubot-tweeter.git"
+    "url": "https://github.com/ibm-cloud-solutions/hubot-emit-tweeter.git"
   },
   "keywords": [
     "hubot"
@@ -23,7 +23,7 @@
   "author": "jhubert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jhubert/hubot-tweeter/issues"
+    "url": "https://github.com/ibm-cloud-solutions/hubot-emit-tweeter/issues"
   },
   "scripts": {
     "test": "script/cibuild"
