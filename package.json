@@ -7,7 +7,11 @@
     "url": "https://github.com/ibm-cloud-solutions/hubot-emit-tweeter.git"
   },
   "keywords": [
-    "hubot"
+    "hubot",
+    "hubot-scripts",
+    "ibm",
+    "cloud",
+    "ibm cloud"
   ],
   "dependencies": {
     "coffee-script": "~1.7.1",
